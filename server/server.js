@@ -36,6 +36,20 @@ app.post("/api/employees/", async (req, res, next) => {
   }
 });
 
+app.get("/api/employees/level/:level", async (req, res) => {
+  const employeesLeveled = await EmployeeModel.find({
+    level: req.params.level,
+  });
+  return res.json(employeesLeveled);
+});
+
+app.get("/api/employees/position/:position", async (req, res) => {
+  const employeesPositioned = await EmployeeModel.find({
+    position: req.params.position,
+  });
+  return res.json(employeesPositioned);
+});
+
 app.patch("/api/employees/:id", async (req, res, next) => {
   try {
     const employee = await EmployeeModel.findOneAndUpdate(

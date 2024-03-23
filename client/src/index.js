@@ -8,6 +8,8 @@ import ErrorPage from "./Pages/ErrorPage";
 import EmployeeList from "./Pages/EmployeeList";
 import EmployeeCreator from "./Pages/EmployeeCreator";
 import EmployeeUpdater from "./Pages/EmployeeUpdater";
+import ListbyLevel from "../../client/src/Pages/ListbyLevel";
+import ListbyPosition from "../../client/src/Pages/ListbyPosition";
 
 import "./index.css";
 import TableTest from "./Pages/TableTest";
@@ -38,6 +40,14 @@ const router = createBrowserRouter([
       {
         path: "/form-test",
         element: <FormTest />,
+      },
+      {
+        path: "/api/employees/:level",
+        element: <ListbyLevel />,
+      },
+      {
+        path: "/api/employees/:position",
+        element: <ListbyPosition />,
       },
     ],
   },
