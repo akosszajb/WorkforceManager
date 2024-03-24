@@ -43,7 +43,7 @@ const Layout = () => {
     } else {
       setFilteredEmployees(allEmployees);
     }
-  }, [filterPosition, filterLevel]);
+  }, [filterPosition, filterLevel, allEmployees]); // Figyeljük az allEmployees állapot változását is
 
   const handlePositionFilter = async () => {
     if (filterPosition !== "") {
@@ -76,24 +76,24 @@ const Layout = () => {
     }
   };
 
-  const handleSubmit = () => {
+  const handlePageReload = () => {
     if (filterPosition !== "" || filterLevel !== "") {
-      // Csak ha valamelyik szűrőmezőben van érték
-      if (filterPosition !== "") {
-        handlePositionFilter();
-      } else if (filterLevel !== "") {
-        handleLevelFilter();
-      }
-      setIsFiltered(true); // Szűrés jelenlétének beállítása
-    } else {
-      setFilteredEmployees(allEmployees);
-      setIsFiltered(false); // Nincs szűrés
+      setFilterPosition("");
+      setFilterLevel("");
+      setIsFiltered(false);
+      window.location.href = "http://localhost:3000/";
     }
   };
 
-  const handlePageReload = () => {
-    if (filterPosition !== "" || filterLevel !== "") {
-      window.location.href = "http://localhost:3000/";
+  const handleDeleteEmployee = async (id) => {
+    const response = await fetch(`/api/employees/${id}`, { method: "DELETE" });
+    if (response.ok) {
+      // Törlés után frissítjük csak a szűrt alkalmazottak listáját
+      const updatedFilteredEmployees = filteredEmployees.filter(
+        (employee) => employee._id !== id
+      );
+      console.log(updatedFilteredEmployees); // Hibakeresés céljából kiírjuk a konzolra a frissített állapotot
+      setFilteredEmployees([...updatedFilteredEmployees]);
     }
   };
 
@@ -141,7 +141,10 @@ const Layout = () => {
       {isFiltered && (
         <div className="FilteredEmployeeList">
           <h2>Employees - Filtered</h2>
-          <EmployeeTable employees={filteredEmployees} />
+          <EmployeeTable
+            employees={filteredEmployees}
+            onDelete={handleDeleteEmployee}
+          />
         </div>
       )}
       <Outlet />

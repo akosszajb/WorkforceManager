@@ -87,8 +87,7 @@ app.patch("/api/employees/:id", async (req, res, next) => {
 
 app.delete("/api/employees/:id", async (req, res, next) => {
   try {
-    const employee = await EmployeeModel.findById(req.params.id);
-    const deleted = await employee.delete();
+    const deleted = await EmployeeModel.deleteOne({ _id: req.params.id });
     return res.json(deleted);
   } catch (err) {
     return next(err);
