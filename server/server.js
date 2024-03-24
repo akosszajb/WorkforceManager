@@ -37,17 +37,39 @@ app.post("/api/employees/", async (req, res, next) => {
 });
 
 app.get("/api/employees/level/:level", async (req, res) => {
-  const employeesLeveled = await EmployeeModel.find({
-    level: req.params.level,
-  });
-  return res.json(employeesLeveled);
+  try {
+    const level = req.params.level;
+    const employees = await EmployeeModel.find({
+      level: { $regex: level, $options: "i" },
+    });
+    if (employees.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No match found for the given level" });
+    }
+    res.json(employees);
+  } catch (error) {
+    console.error("Error fetching employees by level:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 app.get("/api/employees/position/:position", async (req, res) => {
-  const employeesPositioned = await EmployeeModel.find({
-    position: req.params.position,
-  });
-  return res.json(employeesPositioned);
+  try {
+    const position = req.params.position;
+    const employees = await EmployeeModel.find({
+      position: { $regex: position, $options: "i" },
+    });
+    if (employees.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No match found for the given position" });
+    }
+    res.json(employees);
+  } catch (error) {
+    console.error("Error fetching employees by position:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 app.patch("/api/employees/:id", async (req, res, next) => {
