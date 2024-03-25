@@ -38,7 +38,7 @@ const EquipmentUpdater = () => {
     setUpdateLoading(true);
     updateEquipment(equipment).then(() => {
       setUpdateLoading(false);
-      navigate("/");
+      navigate("/equipment");
     });
   };
 
@@ -51,7 +51,7 @@ const EquipmentUpdater = () => {
       equipment={equipment}
       onSave={handleUpdateEquipment}
       disabled={updateLoading}
-      onCancel={() => navigate("/")}
+      onCancel={() => navigate("/equipment")}
     />
   );
 };

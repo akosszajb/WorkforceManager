@@ -22,8 +22,11 @@ Content-Type:  application/json
 }
 
 
-###
-GET http://localhost:8080/api/employees/level/junior
 
 ###
-GET http://localhost:8080/api/employees/position/operatour
+GET http://localhost:8080/employees/robert
+
+###
+GET http://localhost:3000/api/equipments
+###
+GET http://localhost:3000/employee/

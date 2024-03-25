@@ -3,7 +3,7 @@ import Loading from "../Components/Loading";
 import EquipmentTable from "../Components/EquipmentTable/EquipmentTable";
 
 const fetchEquipment = () => {
-  return fetch("/api/equipment").then((res) => res.json());
+  return fetch("/api/equipments").then((res) => res.json());
 };
 
 const deleteEquipment = async (id) => {
@@ -15,8 +15,8 @@ const deleteEquipment = async (id) => {
 };
 
 const EquipmentList = () => {
+  const [equipments, setEquipments] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [equipments, setEquipments] = useState(null);
   const [searchETerm, setSearchETerm] = useState("");
   const [sortEBy, setSortEBy] = useState(null);
 
@@ -24,7 +24,7 @@ const EquipmentList = () => {
     const success = await deleteEquipment(id);
     if (success) {
       setEquipments((prevEquipments) =>
-        prevEquipments.filter((eqipment) => eqipment._id !== id)
+        prevEquipments.filter((equipment) => equipment._id !== id)
       );
     } else {
       console.error(`Failed to delete eqipment with ID ${id}`);
@@ -59,27 +59,29 @@ const EquipmentList = () => {
       });
   }, []);
 
-  let filteredEquipments = [];
-  if (equipments) {
-    filteredEquipments = equipments.filter((equipment) => {
-      return (
-        equipment.name.toLowerCase().includes(searchETerm.toLowerCase()) ||
-        equipment.type.toLowerCase().includes(searchETerm.toLowerCase())
-      );
-    });
+  let filteredEquipments = equipments
+    ? equipments.filter((equipment) => {
+        return (
+          (equipment.name &&
+            equipment.name.toLowerCase().includes(searchETerm.toLowerCase())) ||
+          (equipment.type &&
+            equipment.type.toLowerCase().includes(searchETerm.toLowerCase()))
+        );
+      })
+    : [];
 
-    if (sortEBy) {
-      filteredEquipments.sort((a, b) => {
-        if (sortEBy === "name") {
-          return a.name.localeCompare(b.name);
-        } else if (sortEBy === "type") {
-          return a.type.localeCompare(b.type);
-        } else if (sortEBy === "amount") {
-          return a.amount - b.amount;
-        }
-      });
-    }
+  if (sortEBy) {
+    filteredEquipments.sort((a, b) => {
+      if (sortEBy === "name") {
+        return (a.name || "").localeCompare(b.name);
+      } else if (sortEBy === "type") {
+        return (a.type || "").localeCompare(b.type);
+      } else if (sortEBy === "amount") {
+        return (a.amount || 0) - (b.amount || 0);
+      }
+    });
   }
+
   if (loading) {
     return <Loading />;
   }

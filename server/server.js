@@ -26,6 +26,19 @@ app.get("/api/employees/:id", async (req, res) => {
   return res.json(employee);
 });
 
+app.get("/employees/:search", async (req, res) => {
+  try {
+    const search = req.params.search;
+    const employees = await EmployeeModel.find({
+      firstName: { $regex: new RegExp(search, "i") },
+    });
+    return res.json(employees);
+  } catch (error) {
+    console.error("Error fetching employees:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 app.post("/api/employees/", async (req, res, next) => {
   const employee = req.body;
 
@@ -61,14 +74,14 @@ app.delete("/api/employees/:id", async (req, res, next) => {
 
 //equipment:
 
-app.get("/api/equipment/", async (req, res) => {
+app.get("/api/equipments/", async (req, res) => {
   const equipments = await EquipmentModel.find().sort({ created: "desc" });
   return res.json(equipments);
 });
 
-app.get("/api/equipment/:id", async (req, res) => {
-  const equipments = await EquipmentModel.findById(req.params.id);
-  return res.json(equipments);
+app.get("/api/equipments/:id", async (req, res) => {
+  const equipment = await EquipmentModel.findById(req.params.id);
+  return res.json(equipment);
 });
 
 app.post("/api/equipments/", async (req, res, next) => {
