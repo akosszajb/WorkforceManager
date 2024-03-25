@@ -7,6 +7,7 @@ const EmployeeTable = ({ employees, onDelete }) => (
       <thead>
         <tr>
           <th>Name</th>
+
           <th>Level</th>
           <th>Position</th>
           <th />

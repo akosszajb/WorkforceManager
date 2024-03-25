@@ -17,6 +17,8 @@ const deleteEmployee = async (id) => {
 const EmployeeList = () => {
   const [loading, setLoading] = useState(true);
   const [employees, setEmployees] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortBy, setSortBy] = useState(null);
 
   const handleDelete = async (id) => {
     const success = await deleteEmployee(id);
@@ -27,6 +29,18 @@ const EmployeeList = () => {
     } else {
       console.error(`Failed to delete employee with ID ${id}`);
     }
+  };
+
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handleSortByPosition = () => {
+    setSortBy("position");
+  };
+
+  const handleSortByLevel = () => {
+    setSortBy("level");
   };
 
   useEffect(() => {
@@ -41,13 +55,46 @@ const EmployeeList = () => {
       });
   }, []);
 
+  let filteredEmployees = employees
+    ? employees.filter((employee) => {
+        return (
+          employee.position.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          employee.level.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+      })
+    : [];
+
+  if (sortBy) {
+    filteredEmployees.sort((a, b) => {
+      if (sortBy === "position") {
+        return a.position.localeCompare(b.position);
+      } else if (sortBy === "level") {
+        return a.level.localeCompare(b.level);
+      }
+    });
+  }
+
   if (loading) {
     return <Loading />;
   }
 
-  return employees ? (
-    <EmployeeTable employees={employees} onDelete={handleDelete} />
-  ) : null;
+  return (
+    <>
+      <input
+        type="text"
+        placeholder="Search by Position or Level"
+        value={searchTerm}
+        onChange={handleSearch}
+      />
+      <button type="button" onClick={handleSortByPosition}>
+        Sort by Position
+      </button>
+      <button type="button" onClick={handleSortByLevel}>
+        Sort by Level
+      </button>
+      <EmployeeTable employees={filteredEmployees} onDelete={handleDelete} />
+    </>
+  );
 };
 
 export default EmployeeList;
