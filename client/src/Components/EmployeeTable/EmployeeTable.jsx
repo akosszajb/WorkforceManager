@@ -6,8 +6,9 @@ const EmployeeTable = ({ employees, onDelete }) => (
     <table>
       <thead>
         <tr>
-          <th>Name</th>
-
+          <th>First Name</th>
+          <th>Middle Name</th>
+          <th>Last Name</th>
           <th>Level</th>
           <th>Position</th>
           <th />
@@ -16,7 +17,9 @@ const EmployeeTable = ({ employees, onDelete }) => (
       <tbody>
         {employees.map((employee) => (
           <tr key={employee._id}>
-            <td>{employee.name}</td>
+            <td>{employee.firstName}</td>
+            <td>{employee.middleName}</td>
+            <td>{employee.lastName}</td>
             <td>{employee.level}</td>
             <td>{employee.position}</td>
             <td>

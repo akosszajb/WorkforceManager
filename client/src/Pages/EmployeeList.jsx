@@ -43,6 +43,16 @@ const EmployeeList = () => {
     setSortBy("level");
   };
 
+  const handleSortByFirstName = () => {
+    setSortBy("firstName");
+  };
+  const handleSortByMiddleName = () => {
+    setSortBy("middleName");
+  };
+  const handleSortByLastName = () => {
+    setSortBy("lastName");
+  };
+
   useEffect(() => {
     fetchEmployees()
       .then((employees) => {
@@ -70,6 +80,12 @@ const EmployeeList = () => {
         return a.position.localeCompare(b.position);
       } else if (sortBy === "level") {
         return a.level.localeCompare(b.level);
+      } else if (sortBy === "firstName") {
+        return a.firstName.localeCompare(b.firstName);
+      } else if (sortBy === "middleName") {
+        return a.middleName.localeCompare(b.middleName);
+      } else if (sortBy === "lastName") {
+        return a.lastName.localeCompare(b.lastName);
       }
     });
   }
@@ -91,6 +107,15 @@ const EmployeeList = () => {
       </button>
       <button type="button" onClick={handleSortByLevel}>
         Sort by Level
+      </button>
+      <button type="button" onClick={handleSortByFirstName}>
+        Sort by First Name
+      </button>
+      <button type="button" onClick={handleSortByMiddleName}>
+        Sort by Middle Name
+      </button>
+      <button type="button" onClick={handleSortByLastName}>
+        Sort by Last Name
       </button>
       <EmployeeTable employees={filteredEmployees} onDelete={handleDelete} />
     </>
