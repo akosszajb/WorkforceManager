@@ -1,27 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-const EquipmentForm = ({ onSave, disabled, equip, onCancel }) => {
-  const [name, setName] = useState(equip?.name ?? "");
-  const [type, setType] = useState(equip?.type ?? "");
-  const [amount, setAmount] = useState(equip?.amount ?? "");
+const EquipmentForm = ({ onSave, disabled, equipment, onCancel }) => {
+  const [name, setName] = useState("");
+  const [type, setType] = useState("");
+  const [amount, setAmount] = useState("");
+
+  useEffect(() => {
+    if (equipment) {
+      console.log("Equip object:", equipment);
+      setName(equipment.name || "");
+      setType(equipment.type || "");
+      setAmount(equipment.amount || "");
+    }
+  }, [equipment]);
 
   const onSubmit = (e) => {
     e.preventDefault();
 
-    if (equip) {
-      return onSave({
-        ...equip,
-        name,
-        type,
-        amount,
-      });
-    }
-
-    return onSave({
+    const newEquipment = {
       name,
       type,
       amount,
-    });
+    };
+
+    if (equipment) {
+      onSave({ ...equipment, ...newEquipment });
+    } else {
+      onSave(newEquipment);
+    }
   };
 
   return (
@@ -47,7 +53,7 @@ const EquipmentForm = ({ onSave, disabled, equip, onCancel }) => {
       </div>
 
       <div className="control">
-        <label htmlFor="amount">Amount</label>
+        <label htmlFor="amount">Amount:</label>
         <input
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
@@ -58,9 +64,8 @@ const EquipmentForm = ({ onSave, disabled, equip, onCancel }) => {
 
       <div className="buttons">
         <button type="submit" disabled={disabled}>
-          {equip ? "Update Equipment" : "Create Equipment"}
+          {equipment && equipment._id ? "Update Equipment" : "Create Equipment"}
         </button>
-
         <button type="button" onClick={onCancel}>
           Cancel
         </button>
