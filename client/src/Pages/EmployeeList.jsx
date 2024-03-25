@@ -77,15 +77,15 @@ const EmployeeList = () => {
   if (sortBy) {
     filteredEmployees.sort((a, b) => {
       if (sortBy === "position") {
-        return a.position.localeCompare(b.position);
+        return (a.position || "").localeCompare(b.position || "");
       } else if (sortBy === "level") {
-        return a.level.localeCompare(b.level);
+        return (a.level || "").localeCompare(b.level || "");
       } else if (sortBy === "firstName") {
-        return a.firstName.localeCompare(b.firstName);
+        return (a.firstName || "").localeCompare(b.firstName || "");
       } else if (sortBy === "middleName") {
-        return a.middleName.localeCompare(b.middleName);
+        return (a.middleName || "").localeCompare(b.middleName || "");
       } else if (sortBy === "lastName") {
-        return a.lastName.localeCompare(b.lastName);
+        return (a.lastName || "").localeCompare(b.lastName || "");
       }
     });
   }
@@ -102,12 +102,7 @@ const EmployeeList = () => {
         value={searchTerm}
         onChange={handleSearch}
       />
-      <button type="button" onClick={handleSortByPosition}>
-        Sort by Position
-      </button>
-      <button type="button" onClick={handleSortByLevel}>
-        Sort by Level
-      </button>
+
       <button type="button" onClick={handleSortByFirstName}>
         Sort by First Name
       </button>
@@ -117,6 +112,13 @@ const EmployeeList = () => {
       <button type="button" onClick={handleSortByLastName}>
         Sort by Last Name
       </button>
+      <button type="button" onClick={handleSortByLevel}>
+        Sort by Level
+      </button>
+      <button type="button" onClick={handleSortByPosition}>
+        Sort by Position
+      </button>
+
       <EmployeeTable employees={filteredEmployees} onDelete={handleDelete} />
     </>
   );

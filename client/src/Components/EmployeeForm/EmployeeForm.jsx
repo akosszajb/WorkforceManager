@@ -1,38 +1,59 @@
 import { useState } from "react";
 
 const EmployeeForm = ({ onSave, disabled, employee, onCancel }) => {
-  const [name, setName] = useState(employee?.name ?? "");
+  const [firstName, setFirstName] = useState(employee?.firstName ?? "");
+  const [middleName, setMiddleName] = useState(employee?.middleName ?? "");
+  const [lastName, setLastName] = useState(employee?.lastName ?? "");
   const [level, setLevel] = useState(employee?.level ?? "");
   const [position, setPosition] = useState(employee?.position ?? "");
 
   const onSubmit = (e) => {
     e.preventDefault();
 
-    if (employee) {
-      return onSave({
-        ...employee,
-        name,
-        level,
-        position,
-      });
-    }
-
-    return onSave({
-      name,
+    const newEmployee = {
+      firstName,
+      middleName,
+      lastName,
       level,
       position,
-    });
+    };
+
+    if (employee) {
+      onSave({ ...employee, ...newEmployee });
+    } else {
+      onSave(newEmployee);
+    }
   };
 
   return (
     <form className="EmployeeForm" onSubmit={onSubmit}>
       <div className="control">
-        <label htmlFor="name">Name:</label>
+        <label htmlFor="firstName">First Name:</label>
         <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          name="name"
-          id="name"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+          name="firstName"
+          id="firstName"
+        />
+      </div>
+
+      <div className="control">
+        <label htmlFor="middleName">Middle Name:</label>
+        <input
+          value={middleName}
+          onChange={(e) => setMiddleName(e.target.value)}
+          name="middleName"
+          id="middleName"
+        />
+      </div>
+
+      <div className="control">
+        <label htmlFor="lastName">Last Name:</label>
+        <input
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+          name="lastName"
+          id="lastName"
         />
       </div>
 

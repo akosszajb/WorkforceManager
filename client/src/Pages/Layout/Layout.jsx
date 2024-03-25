@@ -7,11 +7,26 @@ const Layout = () => (
     <nav>
       <ul>
         <li className="grow">
-          <Link to="/">Employees</Link>
+          <Link to="/">The Employee Madness Project</Link>
+        </li>
+        <li>
+          <Link to="/">
+            <button type="button">Employee Page</button>
+          </Link>
         </li>
         <li>
           <Link to="/create">
             <button type="button">Create Employee</button>
+          </Link>
+        </li>
+        <li>
+          <Link to="/equipment">
+            <button type="button">Equipment Page</button>
+          </Link>
+        </li>
+        <li>
+          <Link to="/equipmentcreator">
+            <button type="button">Create Equipment</button>
           </Link>
         </li>
       </ul>

@@ -4,6 +4,7 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const EmployeeModel = require("./db/employee.model");
+const EquipmentModel = require("./db/equipment.model");
 
 const { MONGO_URL, PORT = 8080 } = process.env;
 
@@ -52,6 +53,51 @@ app.patch("/api/employees/:id", async (req, res, next) => {
 app.delete("/api/employees/:id", async (req, res, next) => {
   try {
     const deleted = await EmployeeModel.deleteOne({ _id: req.params.id });
+    return res.json(deleted);
+  } catch (err) {
+    return next(err);
+  }
+});
+
+//equipment:
+
+app.get("/api/equipment/", async (req, res) => {
+  const equipments = await EquipmentModel.find().sort({ created: "desc" });
+  return res.json(equipments);
+});
+
+app.get("/api/equipment/:id", async (req, res) => {
+  const equipments = await EquipmentModel.findById(req.params.id);
+  return res.json(equipments);
+});
+
+app.post("/api/equipments/", async (req, res, next) => {
+  const equipment = req.body;
+
+  try {
+    const saved = await EquipmentModel.create(equipment);
+    return res.json(saved);
+  } catch (err) {
+    return next(err);
+  }
+});
+
+app.patch("/api/equipments/:id", async (req, res, next) => {
+  try {
+    const equipment = await EquipmentModel.findOneAndUpdate(
+      { _id: req.params.id },
+      { $set: { ...req.body } },
+      { new: true }
+    );
+    return res.json(equipment);
+  } catch (err) {
+    return next(err);
+  }
+});
+
+app.delete("/api/equipments/:id", async (req, res, next) => {
+  try {
+    const deleted = await EquipmentModel.deleteOne({ _id: req.params.id });
     return res.json(deleted);
   } catch (err) {
     return next(err);
