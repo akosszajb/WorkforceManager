@@ -4,15 +4,15 @@ import { useNavigate, useParams } from "react-router-dom";
 import EmployeeForm from "../Components/EmployeeForm";
 import Loading from "../Components/Loading";
 
-const updateEmployee = (employee) => {
-  return fetch(`/api/employees/${employee._id}`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(employee),
-  }).then((res) => res.json());
-};
+// const updateEmployee = (employee) => {
+//   return fetch(`/api/employees/${employee._id}`, {
+//     method: "PATCH",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify(employee),
+//   }).then((res) => res.json());
+// };
 
 const fetchEmployee = (id) => {
   return fetch(`/api/employees/${id}`).then((res) => res.json());
@@ -38,7 +38,6 @@ const EmployeeUpdater = () => {
     setUpdateLoading(true);
     let updateSuccessful = false;
     try {
-      // Alkalmazott frissítése
       const response = await fetch(`/api/employees/${employee._id}`, {
         method: "PATCH",
         headers: {
@@ -55,12 +54,10 @@ const EmployeeUpdater = () => {
       console.error("Error updating employee:", error);
     } finally {
       setUpdateLoading(false);
-      navigate("/"); // Visszanavigálás a főoldalra
+      navigate("/");
       if (updateSuccessful) {
-        // Frissítés sikeres üzenet megjelenítése
         console.log("Employee data updated successfully");
       } else {
-        // Frissítés sikertelen üzenet megjelenítése
         console.error("Failed to update employee data");
       }
     }

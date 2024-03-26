@@ -58,8 +58,7 @@ const SearchedEmployeeList = () => {
   };
 
   useEffect(() => {
-    // Egy második useEffect a komponens inicializálásához
-    fetchSearchedEmployees(search) // Keresési kifejezés átadása
+    fetchSearchedEmployees(search)
       .then((employees) => {
         setLoading(false);
         setSearchedEmployees(employees);
@@ -68,9 +67,9 @@ const SearchedEmployeeList = () => {
         console.error("Error fetching employees:", error);
         setLoading(false);
       });
-  }, []); // Üres függőséglista, így csak a komponens inicializálásakor fut le
+  }, []);
 
-  let filteredSEmployees = searchedEmployees.slice(); // Másolat készítése
+  let filteredSEmployees = searchedEmployees.slice();
 
   if (sortSearchedBy) {
     filteredSEmployees.sort((a, b) => {

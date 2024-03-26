@@ -69,13 +69,9 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel }) => {
       }
 
       if (method === "POST") {
-        // Ha új alkalmazottat hozunk létre, akkor a válasz tartalmazza az új alkalmazottat,
-        // amelyet a mentés után menthetünk a szülő komponensen keresztül.
         const createdEmployee = await response.json();
         onSave(createdEmployee);
       } else {
-        // Ha frissítettük az alkalmazottat, akkor csak frissítsük a helyi állapotot,
-        // nincs szükség további válasz feldolgozására.
         onSave(newEmployee);
       }
     } catch (error) {

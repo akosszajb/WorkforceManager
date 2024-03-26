@@ -118,7 +118,7 @@ app.delete("/api/equipments/:id", async (req, res, next) => {
 });
 
 app.patch("/api/emp/:id/equipment", async (req, res) => {
-  const { equipmentId } = req.body; // Módosítás: equipmentId
+  const { equipmentId } = req.body;
   const id = req.params.id;
   try {
     const employee = await EmployeeModel.findById(id);
@@ -126,14 +126,12 @@ app.patch("/api/emp/:id/equipment", async (req, res) => {
       return res.status(404).json({ error: "Employee not found" });
     }
     if (!equipmentId) {
-      // Módosítás: equipmentId
       return res.status(400).json({ error: "Equipment data is missing" });
     }
-    const equipmentObject = await EquipmentModel.findById(equipmentId); // Módosítás: equipmentId
+    const equipmentObject = await EquipmentModel.findById(equipmentId);
     if (!equipmentObject) {
       return res.status(404).json({ error: "Equipment not found" });
     }
-    // Csak az equipment objektum _id-jét állítjuk be az employee.equipment értékébe
     employee.equipment = equipmentObject._id;
     await employee.save();
     return res.json(employee);
