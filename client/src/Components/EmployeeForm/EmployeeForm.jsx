@@ -1,14 +1,46 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+import { useNavigate } from "react-router-dom";
 
 const EmployeeForm = ({ onSave, disabled, employee, onCancel }) => {
+  const navigate = useNavigate();
   const [firstName, setFirstName] = useState(employee?.firstName ?? "");
   const [middleName, setMiddleName] = useState(employee?.middleName ?? "");
   const [lastName, setLastName] = useState(employee?.lastName ?? "");
   const [level, setLevel] = useState(employee?.level ?? "");
   const [position, setPosition] = useState(employee?.position ?? "");
+  const [selectedEquipments, setSelectedEquipments] = useState(
+    employee && employee.equipment ? [employee.equipment.name] : []
+  );
+  const [equipments, setEquipments] = useState([]);
 
-  const onSubmit = (e) => {
+  useEffect(() => {
+    const fetchEquipments = async () => {
+      try {
+        const response = await fetch("/api/equipments");
+        if (!response.ok) {
+          throw new Error("Failed to fetch equipments");
+        }
+        const data = await response.json();
+        setEquipments(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchEquipments();
+  }, []);
+
+  const onSubmit = async (e) => {
     e.preventDefault();
+
+    let endpoint = "/api/employees";
+    let method = "POST";
+
+    if (employee && employee._id) {
+      endpoint = `/api/employees/${employee._id}`;
+      method = "PATCH";
+    }
 
     const newEmployee = {
       firstName,
@@ -16,13 +48,43 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel }) => {
       lastName,
       level,
       position,
+      equipment: selectedEquipments.length > 0 ? selectedEquipments[0] : "",
     };
 
-    if (employee) {
-      onSave({ ...employee, ...newEmployee });
-    } else {
-      onSave(newEmployee);
+    console.log("Selected Equipments:", selectedEquipments);
+
+    try {
+      const response = await fetch(endpoint, {
+        method: method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newEmployee),
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to ${method === "POST" ? "create" : "update"} employee data`
+        );
+      }
+
+      if (method === "POST") {
+        // Ha új alkalmazottat hozunk létre, akkor a válasz tartalmazza az új alkalmazottat,
+        // amelyet a mentés után menthetünk a szülő komponensen keresztül.
+        const createdEmployee = await response.json();
+        onSave(createdEmployee);
+      } else {
+        // Ha frissítettük az alkalmazottat, akkor csak frissítsük a helyi állapotot,
+        // nincs szükség további válasz feldolgozására.
+        onSave(newEmployee);
+      }
+    } catch (error) {
+      console.error(
+        `Error ${method === "POST" ? "creating" : "updating"} employee:`,
+        error
+      );
     }
+    navigate("/");
   };
 
   return (
@@ -75,6 +137,26 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel }) => {
           name="position"
           id="position"
         />
+      </div>
+
+      <div className="control">
+        <label htmlFor="equipments">Equipments:</label>
+        <select
+          multiple
+          name="equipments"
+          value={selectedEquipments}
+          onChange={(e) =>
+            setSelectedEquipments(
+              Array.from(e.target.selectedOptions, (option) => option.value)
+            )
+          }
+        >
+          {equipments.map((equipment) => (
+            <option key={equipment._id} value={equipment.name}>
+              {equipment.name}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div className="buttons">

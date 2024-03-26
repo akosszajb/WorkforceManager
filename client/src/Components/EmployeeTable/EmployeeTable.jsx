@@ -12,6 +12,7 @@ const EmployeeTable = ({ employees, onDelete, handlePresentToggle }) => (
           <th>Level</th>
           <th>Position</th>
           <th>Present </th>
+          <th>Equipment assigned to employee</th>
         </tr>
       </thead>
       <tbody>
@@ -22,14 +23,17 @@ const EmployeeTable = ({ employees, onDelete, handlePresentToggle }) => (
             <td>{employee.lastName}</td>
             <td>{employee.level}</td>
             <td>{employee.position}</td>
+
             <td>
               <input
                 type="checkbox"
                 onChange={() =>
                   handlePresentToggle(employee._id, !employee.present)
                 }
+                checked={employee.present}
               />
             </td>
+            <td>{employee.equipment}</td>
             <td>
               <Link to={`/employee/update/${employee._id}`}>
                 <button type="button">Update</button>

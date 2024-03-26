@@ -117,6 +117,32 @@ app.delete("/api/equipments/:id", async (req, res, next) => {
   }
 });
 
+app.patch("/api/emp/:id/equipment", async (req, res) => {
+  const { equipmentId } = req.body; // Módosítás: equipmentId
+  const id = req.params.id;
+  try {
+    const employee = await EmployeeModel.findById(id);
+    if (!employee) {
+      return res.status(404).json({ error: "Employee not found" });
+    }
+    if (!equipmentId) {
+      // Módosítás: equipmentId
+      return res.status(400).json({ error: "Equipment data is missing" });
+    }
+    const equipmentObject = await EquipmentModel.findById(equipmentId); // Módosítás: equipmentId
+    if (!equipmentObject) {
+      return res.status(404).json({ error: "Equipment not found" });
+    }
+    // Csak az equipment objektum _id-jét állítjuk be az employee.equipment értékébe
+    employee.equipment = equipmentObject._id;
+    await employee.save();
+    return res.json(employee);
+  } catch (error) {
+    console.error("Error updating employee equipment:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 const main = async () => {
   await mongoose.connect(MONGO_URL);
 

@@ -30,3 +30,14 @@ GET http://localhost:8080/employees/robert
 GET http://localhost:3000/api/equipments
 ###
 GET http://localhost:3000/employee/
+
+###
+PATCH http://localhost:3000/api/employees/66030958740e14509d9d72a3
+
+###
+PATCH http://localhost:3000/api/emp/66030958740e14509d9d7242/equipment
+
+{
+  "equipment": "66030959740e14509d9d730d"
+}
+

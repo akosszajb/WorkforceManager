@@ -12,6 +12,7 @@ const equipment = require("./equipmentdata.json");
 const EquipmentModel = require("../db/equipment.model");
 
 const mongoUrl = process.env.MONGO_URL;
+const emptyEquipment = [];
 
 if (!mongoUrl) {
   console.error("Missing MONGO_URL environment variable");
@@ -46,6 +47,7 @@ const populateEmployees = async () => {
       lastName,
       level: pick(levels),
       position: pick(positions),
+      equipment: "",
     };
   });
 
