@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Loading from "../Components/Loading";
-import EmployeeTable from "../Components/EmployeeTable";
+import MissingEmployeeTable from "../Components/MissingEmployeeTable/MissingEmployeeTable";
 
-const fetchEmployees = () => {
+const fetchMissingEmployees = () => {
   return fetch("/api/employees").then((res) => res.json());
 };
 
-const deleteEmployee = async (id) => {
+const deleteMissingEmployee = async (id) => {
   const response = await fetch(`/api/employees/${id}`, { method: "DELETE" });
   if (response.ok) {
     return true;
@@ -14,47 +14,20 @@ const deleteEmployee = async (id) => {
   return false;
 };
 
-const toggleEmployeePresent = async (id, present) => {
-  const response = await fetch(`/api/employees/${id}`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ present }),
-  });
-  if (response.ok) {
-    return true;
-  }
-  return false;
-};
-
-const EmployeeList = () => {
+const MissingEmployeeList = () => {
   const [loading, setLoading] = useState(true);
   const [employees, setEmployees] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState(null);
 
   const handleDelete = async (id) => {
-    const success = await deleteEmployee(id);
+    const success = await deleteMissingEmployee(id);
     if (success) {
       setEmployees((prevEmployees) =>
         prevEmployees.filter((employee) => employee._id !== id)
       );
     } else {
       console.error(`Failed to delete employee with ID ${id}`);
-    }
-  };
-
-  const handlePresentToggle = async (id, present) => {
-    const success = await toggleEmployeePresent(id, present);
-    if (success) {
-      setEmployees((prevEmployees) =>
-        prevEmployees.map((employee) =>
-          employee._id === id ? { ...employee, present } : employee
-        )
-      );
-    } else {
-      console.error(`Failed to toggle employee present status with ID ${id}`);
     }
   };
 
@@ -81,7 +54,7 @@ const EmployeeList = () => {
   };
 
   useEffect(() => {
-    fetchEmployees()
+    fetchMissingEmployees()
       .then((employees) => {
         setLoading(false);
         setEmployees(employees);
@@ -95,8 +68,9 @@ const EmployeeList = () => {
   let filteredEmployees = employees
     ? employees.filter((employee) => {
         return (
-          employee.position.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          employee.level.toLowerCase().includes(searchTerm.toLowerCase())
+          !employee.present &&
+          (employee.position.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            employee.level.toLowerCase().includes(searchTerm.toLowerCase()))
         );
       })
     : [];
@@ -146,13 +120,12 @@ const EmployeeList = () => {
         Sort by Position
       </button>
 
-      <EmployeeTable
+      <MissingEmployeeTable
         employees={filteredEmployees}
         onDelete={handleDelete}
-        handlePresentToggle={handlePresentToggle}
       />
     </>
   );
 };
 
-export default EmployeeList;
+export default MissingEmployeeList;

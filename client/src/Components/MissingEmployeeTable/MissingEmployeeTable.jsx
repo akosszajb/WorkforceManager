@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import "./EmployeeTable.css";
+import "./MissingEmployeeTable.css";
 
-const EmployeeTable = ({ employees, onDelete, handlePresentToggle }) => (
-  <div className="EmployeeTable">
+const MissingEmployeeTable = ({ employees, onDelete }) => (
+  <div className="MissingEmployeeTable">
     <table>
       <thead>
         <tr>
@@ -23,12 +23,7 @@ const EmployeeTable = ({ employees, onDelete, handlePresentToggle }) => (
             <td>{employee.level}</td>
             <td>{employee.position}</td>
             <td>
-              <input
-                type="checkbox"
-                onChange={() =>
-                  handlePresentToggle(employee._id, !employee.present)
-                }
-              />
+              <input type="checkbox" checked={employee.present} readOnly />
             </td>
             <td>
               <Link to={`/employee/update/${employee._id}`}>
@@ -46,4 +41,4 @@ const EmployeeTable = ({ employees, onDelete, handlePresentToggle }) => (
   </div>
 );
 
-export default EmployeeTable;
+export default MissingEmployeeTable;

@@ -16,6 +16,7 @@ import "./index.css";
 import TableTest from "./Pages/TableTest";
 import FormTest from "./Pages/FormTest";
 import EquipmentCreator from "./Pages/EquipmentCreator.jsx";
+import MissingEmployeeList from "./Pages/MissingEmployeeList.jsx";
 
 const router = createBrowserRouter([
   {
@@ -59,6 +60,7 @@ const router = createBrowserRouter([
         path: "/employees/:search",
         element: <SearchedEmployeeList />,
       },
+      { path: "/missingemployees", element: <MissingEmployeeList /> },
     ],
   },
 ]);

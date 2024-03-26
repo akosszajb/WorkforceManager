@@ -21,7 +21,7 @@ button {
   outline: rgb(99, 151, 254);
   border-radius: 4px;
   cursor: pointer;
-  background-color: white;
+  background-color: rgb(134, 197, 92);
 }
 
 button:hover {
@@ -44,11 +44,11 @@ table {
 }
 
 table tbody tr {
-  background-color: rgb(198, 218, 255);
+  background-color: rgb(198, 255, 203);
 }
 
 table tbody tr:nth-child(even) {
-  background-color: rgb(219, 230, 255);
+  background-color: rgb(156, 209, 160);
 }
 
 table td,
