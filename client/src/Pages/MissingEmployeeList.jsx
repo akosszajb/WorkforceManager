@@ -14,11 +14,27 @@ const deleteMissingEmployee = async (id) => {
   return false;
 };
 
+const toggleMissingEmployeePresent = async (id, present) => {
+  const response = await fetch(`/api/employees/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ present }),
+  });
+  if (response.ok) {
+    return true;
+  }
+  return false;
+};
+
 const MissingEmployeeList = () => {
   const [loading, setLoading] = useState(true);
   const [employees, setEmployees] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
 
   const handleDelete = async (id) => {
     const success = await deleteMissingEmployee(id);
@@ -28,6 +44,19 @@ const MissingEmployeeList = () => {
       );
     } else {
       console.error(`Failed to delete employee with ID ${id}`);
+    }
+  };
+
+  const handlePresentToggle = async (id, present) => {
+    const success = await toggleMissingEmployeePresent(id, present);
+    if (success) {
+      setEmployees((prevEmployees) =>
+        prevEmployees.map((employee) =>
+          employee._id === id ? { ...employee, present } : employee
+        )
+      );
+    } else {
+      console.error(`Failed to toggle employee present status with ID ${id}`);
     }
   };
 
@@ -58,12 +87,16 @@ const MissingEmployeeList = () => {
       .then((employees) => {
         setLoading(false);
         setEmployees(employees);
+        setTotalPages(Math.ceil(employees.length / 10));
       })
       .catch((error) => {
         console.error("Error fetching employees:", error);
         setLoading(false);
       });
   }, []);
+
+  const startIndex = (currentPage - 1) * 10;
+  const endIndex = startIndex + 10;
 
   let filteredEmployees = employees
     ? employees.filter((employee) => {
@@ -74,6 +107,18 @@ const MissingEmployeeList = () => {
         );
       })
     : [];
+
+  useEffect(() => {
+    if (employees) {
+      const filteredEmployees = employees.filter(
+        (employee) =>
+          !employee.present &&
+          (employee.position.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            employee.level.toLowerCase().includes(searchTerm.toLowerCase()))
+      );
+      setTotalPages(Math.ceil(filteredEmployees.length / 10));
+    }
+  }, [employees, searchTerm]);
 
   if (sortBy) {
     filteredEmployees.sort((a, b) => {
@@ -90,6 +135,12 @@ const MissingEmployeeList = () => {
       }
     });
   }
+
+  const currentEmployees = filteredEmployees.slice(startIndex, endIndex);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   if (loading) {
     return <Loading />;
@@ -121,9 +172,21 @@ const MissingEmployeeList = () => {
       </button>
 
       <MissingEmployeeTable
-        employees={filteredEmployees}
+        employees={currentEmployees}
         onDelete={handleDelete}
+        handlePresentToggle={handlePresentToggle}
       />
+      <div className="pagination">
+        {Array.from({ length: totalPages }, (_, index) => (
+          <button
+            key={index}
+            onClick={() => handlePageChange(index + 1)}
+            className={currentPage === index + 1 ? "active" : ""}
+          >
+            {index + 1}
+          </button>
+        ))}
+      </div>
     </>
   );
 };

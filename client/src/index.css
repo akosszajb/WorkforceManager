@@ -101,3 +101,7 @@ button {
 .grow {
   flex: 1;
 }
+.pagination {
+  display: flex;
+  justify-content: center;
+}

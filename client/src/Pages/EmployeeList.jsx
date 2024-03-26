@@ -33,6 +33,8 @@ const EmployeeList = () => {
   const [employees, setEmployees] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
 
   const handleDelete = async (id) => {
     const success = await deleteEmployee(id);
@@ -83,14 +85,18 @@ const EmployeeList = () => {
   useEffect(() => {
     fetchEmployees()
       .then((employees) => {
-        setLoading(false);
         setEmployees(employees);
+        setLoading(false);
+        setTotalPages(Math.ceil(employees.length / 10));
       })
       .catch((error) => {
         console.error("Error fetching employees:", error);
         setLoading(false);
       });
   }, []);
+
+  const startIndex = (currentPage - 1) * 10;
+  const endIndex = startIndex + 10;
 
   let filteredEmployees = employees
     ? employees.filter((employee) => {
@@ -116,6 +122,12 @@ const EmployeeList = () => {
       }
     });
   }
+
+  const currentEmployees = filteredEmployees.slice(startIndex, endIndex);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   if (loading) {
     return <Loading />;
@@ -147,10 +159,21 @@ const EmployeeList = () => {
       </button>
 
       <EmployeeTable
-        employees={filteredEmployees}
+        employees={currentEmployees}
         onDelete={handleDelete}
         handlePresentToggle={handlePresentToggle}
       />
+      <div className="pagination">
+        {Array.from({ length: totalPages }, (_, index) => (
+          <button
+            key={index}
+            onClick={() => handlePageChange(index + 1)}
+            className={currentPage === index + 1 ? "active" : ""}
+          >
+            {index + 1}
+          </button>
+        ))}
+      </div>
     </>
   );
 };
