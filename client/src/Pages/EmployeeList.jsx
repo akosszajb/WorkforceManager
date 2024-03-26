@@ -32,7 +32,7 @@ const EmployeeList = () => {
   const [loading, setLoading] = useState(true);
   const [employees, setEmployees] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortBy, setSortBy] = useState(null);
+  const [sortBy, setSortBy] = useState({ key: null, order: "asc" });
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
 
@@ -64,22 +64,12 @@ const EmployeeList = () => {
     setSearchTerm(event.target.value);
   };
 
-  const handleSortByPosition = () => {
-    setSortBy("position");
-  };
-
-  const handleSortByLevel = () => {
-    setSortBy("level");
-  };
-
-  const handleSortByFirstName = () => {
-    setSortBy("firstName");
-  };
-  const handleSortByMiddleName = () => {
-    setSortBy("middleName");
-  };
-  const handleSortByLastName = () => {
-    setSortBy("lastName");
+  const handleSort = (key) => {
+    if (sortBy.key === key) {
+      setSortBy({ key, order: sortBy.order === "asc" ? "desc" : "asc" });
+    } else {
+      setSortBy({ key, order: "asc" });
+    }
   };
 
   useEffect(() => {
@@ -107,18 +97,16 @@ const EmployeeList = () => {
       })
     : [];
 
-  if (sortBy) {
+  if (sortBy.key) {
     filteredEmployees.sort((a, b) => {
-      if (sortBy === "position") {
-        return (a.position || "").localeCompare(b.position || "");
-      } else if (sortBy === "level") {
-        return (a.level || "").localeCompare(b.level || "");
-      } else if (sortBy === "firstName") {
-        return (a.firstName || "").localeCompare(b.firstName || "");
-      } else if (sortBy === "middleName") {
-        return (a.middleName || "").localeCompare(b.middleName || "");
-      } else if (sortBy === "lastName") {
-        return (a.lastName || "").localeCompare(b.lastName || "");
+      const keyA = a[sortBy.key];
+      const keyB = b[sortBy.key];
+      if (typeof keyA === "string") {
+        return sortBy.order === "asc"
+          ? keyA.localeCompare(keyB)
+          : keyB.localeCompare(keyA);
+      } else {
+        return sortBy.order === "asc" ? keyA - keyB : keyB - keyA;
       }
     });
   }
@@ -142,19 +130,19 @@ const EmployeeList = () => {
         onChange={handleSearch}
       />
 
-      <button type="button" onClick={handleSortByFirstName}>
+      <button type="button" onClick={() => handleSort("firstName")}>
         Sort by First Name
       </button>
-      <button type="button" onClick={handleSortByMiddleName}>
+      <button type="button" onClick={() => handleSort("middleName")}>
         Sort by Middle Name
       </button>
-      <button type="button" onClick={handleSortByLastName}>
+      <button type="button" onClick={() => handleSort("lastName")}>
         Sort by Last Name
       </button>
-      <button type="button" onClick={handleSortByLevel}>
+      <button type="button" onClick={() => handleSort("level")}>
         Sort by Level
       </button>
-      <button type="button" onClick={handleSortByPosition}>
+      <button type="button" onClick={() => handleSort("position")}>
         Sort by Position
       </button>
 
