@@ -12,7 +12,12 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel }) => {
   const [selectedEquipments, setSelectedEquipments] = useState(
     employee && employee.equipment ? [employee.equipment.name] : []
   );
+  const [favBrand, setFavBrand] = useState(employee?.favBrand?.$oid ?? "");
+  const [selectedFavBrand, setSelectedFavBrand] = useState(
+    employee?.favBrand?.$oid ?? ""
+  );
   const [equipments, setEquipments] = useState([]);
+  const [brands, setBrands] = useState([]);
 
   useEffect(() => {
     const fetchEquipments = async () => {
@@ -28,7 +33,21 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel }) => {
       }
     };
 
+    const fetchBrands = async () => {
+      try {
+        const response = await fetch("/api/brand");
+        if (!response.ok) {
+          throw new Error("Failed to fetch brands");
+        }
+        const data = await response.json();
+        setBrands(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
     fetchEquipments();
+    fetchBrands();
   }, []);
 
   const onSubmit = async (e) => {
@@ -48,6 +67,7 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel }) => {
       lastName,
       level,
       position,
+      favBrand: selectedFavBrand,
       equipment: selectedEquipments.length > 0 ? selectedEquipments[0] : "",
     };
 
@@ -82,6 +102,14 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel }) => {
     }
     navigate("/");
   };
+
+  // useEffect(() => {
+  //   async function getBrands() {
+  //     const data = await fetch("/api/brand").then((res) => res.json());
+  //     setBrands(data);
+  //   }
+  //   getBrands();
+  // }, []);
 
   return (
     <form className="EmployeeForm" onSubmit={onSubmit}>
@@ -133,6 +161,28 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel }) => {
           name="position"
           id="position"
         />
+      </div>
+
+      <div className="control">
+        <label htmlFor="favBrand">favBrand:</label>
+        <select
+          value={favBrand}
+          name="favBrand"
+          id="favBrand"
+          onChange={(e) => {
+            const selectedBrandId = brands.find(
+              (brand) => brand.name === e.target.value
+            )?._id;
+            setSelectedFavBrand(selectedBrandId || "");
+            setFavBrand(e.target.value);
+          }}
+        >
+          {brands.map((nextBrand) => (
+            <option key={nextBrand._id} value={nextBrand.name}>
+              {nextBrand.name}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div className="control">

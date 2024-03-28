@@ -5,6 +5,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const EmployeeModel = require("./db/employee.model");
 const EquipmentModel = require("./db/equipment.model");
+const BrandModel = require("./db/brand.model");
 
 const { MONGO_URL, PORT = 8080 } = process.env;
 
@@ -17,7 +18,9 @@ const app = express();
 app.use(express.json());
 
 app.get("/api/employees/", async (req, res) => {
-  const employees = await EmployeeModel.find().sort({ created: "desc" });
+  const employees = await EmployeeModel.find()
+    .populate("favBrand")
+    .sort({ created: "desc" });
   return res.json(employees);
 });
 
@@ -138,6 +141,17 @@ app.patch("/api/emp/:id/equipment", async (req, res) => {
   } catch (error) {
     console.error("Error updating employee equipment:", error);
     return res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+// favBrand
+app.get("/api/brand", async (req, res) => {
+  try {
+    const brands = await BrandModel.find();
+    res.json(brands);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Error with /api/brand endppoint" });
   }
 });
 

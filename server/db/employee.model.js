@@ -14,6 +14,10 @@ const EmployeeSchema = new Schema({
     default: false,
   },
   equipment: String,
+  favBrand: {
+    type: Schema.Types.ObjectId,
+    ref: "Brand",
+  },
   created: {
     type: Date,
     default: Date.now,

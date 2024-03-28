@@ -14,20 +14,6 @@ const deleteEquipment = async (id) => {
   return false;
 };
 
-const toggleEmployeePresent = async (id, present) => {
-  const response = await fetch(`/api/employees/${id}`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ present }),
-  });
-  if (response.ok) {
-    return true;
-  }
-  return false;
-};
-
 const EquipmentList = () => {
   const [equipments, setEquipments] = useState([]);
   const [loading, setLoading] = useState(true);

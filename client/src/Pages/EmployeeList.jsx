@@ -112,7 +112,6 @@ const EmployeeList = () => {
   }
 
   const currentEmployees = filteredEmployees.slice(startIndex, endIndex);
-
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
