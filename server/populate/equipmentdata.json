@@ -1,0 +1,102 @@
+[
+    {
+        "name": "Laptop",
+        "type": "Electronics",
+        "amount": 10
+    },
+    {
+        "name": "Projector",
+        "type": "Electronics",
+        "amount": 5
+    },
+    {
+        "name": "Chair",
+        "type": "Furniture",
+        "amount": 30
+    },
+    {
+        "name": "Desk",
+        "type": "Furniture",
+        "amount": 20
+    },
+    {
+        "name": "Printer",
+        "type": "Electronics",
+        "amount": 8
+    },
+    {
+        "name": "Keyboard",
+        "type": "Electronics",
+        "amount": 15
+    },
+    {
+        "name": "Mouse",
+        "type": "Electronics",
+        "amount": 20
+    },
+    {
+        "name": "Scanner",
+        "type": "Electronics",
+        "amount": 6
+    },
+    {
+        "name": "Phone",
+        "type": "Electronics",
+        "amount": 25
+    },
+    {
+        "name": "Table",
+        "type": "Furniture",
+        "amount": 15
+    },
+    {
+        "name": "Projector Screen",
+        "type": "Electronics",
+        "amount": 3
+    },
+    {
+        "name": "Printer Paper",
+        "type": "Office Supplies",
+        "amount": 50
+    },
+    {
+        "name": "Stapler",
+        "type": "Office Supplies",
+        "amount": 12
+    },
+    {
+        "name": "Whiteboard",
+        "type": "Office Supplies",
+        "amount": 7
+    },
+    {
+        "name": "Water Dispenser",
+        "type": "Appliance",
+        "amount": 2
+    },
+    {
+        "name": "Coffee Maker",
+        "type": "Appliance",
+        "amount": 3
+    },
+    {
+        "name": "Microwave",
+        "type": "Appliance",
+        "amount": 4
+    },
+    {
+        "name": "Refrigerator",
+        "type": "Appliance",
+        "amount": 2
+    },
+    {
+        "name": "Cleaning Supplies",
+        "type": "Cleaning",
+        "amount": 10
+    },
+    {
+        "name": "Trash Can",
+        "type": "Cleaning",
+        "amount": 8
+    }
+]
