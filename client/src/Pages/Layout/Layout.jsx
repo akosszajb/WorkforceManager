@@ -7,7 +7,7 @@ const Layout = () => (
     <nav>
       <ul>
         <li className="grow">
-          <Link to="/">The Employee Madness Project</Link>
+          <Link to="/">Workforce Manager</Link>
         </li>
         <li>
           <Link to="/">
