@@ -41,6 +41,10 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel }) => {
         }
         const data = await response.json();
         setBrands(data);
+        if (!employee?.favBrand?.$oid && data.length > 0) {
+          setFavBrand(data[0].name);
+          setSelectedFavBrand(data[0]._id);
+        }
       } catch (error) {
         console.error(error);
       }
@@ -70,9 +74,6 @@ const EmployeeForm = ({ onSave, disabled, employee, onCancel }) => {
       favBrand: selectedFavBrand,
       equipment: selectedEquipments.length > 0 ? selectedEquipments[0] : "",
     };
-
-    console.log("Selected Equipments:", selectedEquipments);
-
     try {
       const response = await fetch(endpoint, {
         method: method,

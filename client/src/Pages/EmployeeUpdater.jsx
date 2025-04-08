@@ -27,8 +27,9 @@ const EmployeeUpdater = () => {
   const handleUpdateEmployee = async (employee) => {
     setUpdateLoading(true);
     let updateSuccessful = false;
+
     try {
-      const response = await fetch(`/api/employees/${employee._id}`, {
+      const response = await fetch(`/api/employees/${id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -45,11 +46,6 @@ const EmployeeUpdater = () => {
     } finally {
       setUpdateLoading(false);
       navigate("/");
-      if (updateSuccessful) {
-        console.log("Employee data updated successfully");
-      } else {
-        console.error("Failed to update employee data");
-      }
     }
   };
 
