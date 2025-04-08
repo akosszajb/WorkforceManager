@@ -60,9 +60,13 @@ app.patch("/api/employees/:id", async (req, res, next) => {
       { $set: { ...req.body } },
       { new: true }
     );
+    if (!employee) {
+      return res.status(404).json({ error: "Employee not found" });
+    }
     return res.json(employee);
   } catch (err) {
-    return next(err);
+    console.error("Error updating employee:", err);
+    return res.status(500).json({ error: "Error updating employee data" });
   }
 });
 
